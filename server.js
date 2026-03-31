@@ -1,5 +1,4 @@
 const express = require('express');
-const crypto = require('crypto');
 const path = require('path');
 const fs = require('fs');
 const app = express();
@@ -19,8 +18,13 @@ app.get('/', (req, res) => {
     return res.sendFile(path.join(__dirname, 'index.html'));
   }
 
+  const fakeHwids = ['TEST', 'UNKNOWN', 'test', 'unknown'];
+  if (fakeHwids.includes(hwid) || hwid.length < 20) {
+    return res.sendFile(path.join(__dirname, 'index.html'));
+  }
+
   if (blacklist.has(hwid)) {
-    return res.send('error("❌ You are banned from this script.")');
+    return res.send('error("❌ You are banned.")');
   }
 
   console.log(`[SCRIPT] Delivered to HWID: ${hwid}`);
